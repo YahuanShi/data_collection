@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+
+# Virtual environments
+DaCo/
+
+# ROS 2 build artifacts
+build/
+install/
+log/
+
+# Datasets (large binary — store separately)
+*.hdf5
+*.h5
+*.zarr/
+
+# Caches
+.ruff_cache/
+.vscode/
+.DS_Store

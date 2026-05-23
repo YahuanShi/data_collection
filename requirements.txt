@@ -1,0 +1,32 @@
+# =============================================================================
+# data_collection — unified Python dependencies
+# Ubuntu 22.04 + ROS 2 Humble
+#
+# Install via:
+#   bash install.sh          (recommended — also handles ROS 2 and colcon build)
+#
+#   or manually:
+#   python3 -m venv DaCo && source DaCo/bin/activate
+#   pip install -r requirements.txt
+# =============================================================================
+
+# ── Core numerics ─────────────────────────────────────────────────────────────
+numpy==1.26.4                   # pinned: ros-humble cv_bridge requires numpy<2
+scipy>=1.10
+h5py>=3.11.0
+
+# ── Vision ────────────────────────────────────────────────────────────────────
+opencv-python>=4.11.0
+matplotlib>=3.7                 # data_processing viz tools
+
+# ── Robot hardware ────────────────────────────────────────────────────────────
+ur-rtde                         # Universal Robots RTDE control + receive
+pyrealsense2>=2.55.1            # Intel RealSense cameras
+
+# ── Peripherals ───────────────────────────────────────────────────────────────
+pyserial==3.5                   # Weiss CRG 30-050 gripper (USB serial)
+feetech-servo-sdk==1.0.0        # Uarm master arm (Feetech servos)
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+PyYAML==6.0.2
+tqdm>=4.67.0
