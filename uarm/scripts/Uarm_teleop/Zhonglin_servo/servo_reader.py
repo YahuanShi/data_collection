@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import re
-import time
 
 import rclpy
 from rclpy.node import Node
@@ -40,15 +39,16 @@ class ServoReaderNode(Node):
 
         self._init_servos()
 
-        # Publish at ~20 Hz (all 6 joints + gripper read per tick = 7 x 8 ms ~ 56 ms/cycle)
-        self.create_timer(1.0 / 20.0, self._timer_cb)
+        # Publish at ~15 Hz: read_until blocks until '!' arrives (serial timeout=0.1 s as fallback).
+        # 7 servos × ~7 ms normal response ≈ 50 ms/cycle; 15 Hz (67 ms period) gives enough headroom.
+        self.create_timer(1.0 / 15.0, self._timer_cb)
 
     # ── Serial helpers ─────────────────────────────────────────────────────
 
     def send_command(self, cmd: str) -> str:
+        self.ser.reset_input_buffer()  # discard stale bytes from previous timed-out response
         self.ser.write(cmd.encode("ascii"))
-        time.sleep(0.008)
-        return self.ser.read_all().decode("ascii", errors="ignore")
+        return self.ser.read_until(b"!").decode("ascii", errors="ignore")
 
     def pwm_to_angle(self, response_str: str, pwm_min=500, pwm_max=2500, angle_range=270) -> float | None:
         match = re.search(r"P(\d{4})", response_str)
